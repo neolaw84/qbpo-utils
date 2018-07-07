@@ -38,7 +38,7 @@ public class QbpoUtilHelp implements QbpoUtil {
 		
 		sb.append("Usage of each commands are : ");
 		for (Map.Entry<String, QbpoUtil> e : qbpoUtilsConfig.command2QbpoUtil.entrySet()) {
-			sb.append("java -jar this.jar ").append(e.getKey());
+			sb.append("java -jar this.jar ").append(e.getKey()).append(" ");
 			if (!HELP_COMMAND.equals(e.getKey())) {
 				sb.append(e.getValue().getHelpMessage());
 			}

@@ -36,4 +36,18 @@ public class QbpoValueMap extends HashMap<String, List<String>> {
 		return answer;
 		
 	}
+	
+	public String getFirstString (String key) {
+		if (!this.containsKey(key))
+			return null; 
+		
+		List<String> values = this.get(key);
+		
+		if (values == null || values.isEmpty())
+			return null; 
+		
+		String answer = values.get(0);
+		
+		return answer; 
+	}
 }

@@ -70,8 +70,9 @@ public class QbpoUtilsApplicationRunner implements ApplicationRunner {
 		if (qbpoUtil == null) {
 			log.error("Command not found.");
 			qbpoUtil = qbpoUtilsConfig.getQbpoUtilByCommand("help");
-			qbpoUtil.run(nonOptionArgs, valueArgs);
+			
 		}
+		qbpoUtil.run(nonOptionArgs, valueArgs);
 	}
 }
 
