@@ -6,7 +6,7 @@
 
 	<groupId>space.qbpo</groupId>
 	<artifactId>utils</artifactId>
-	<version>18.07</version>
+	<version>18.07.001</version>
 	<packaging>jar</packaging>
 
 	<name>qbpo-utils</name>

@@ -1,9 +1,8 @@
-package space.qbpo.utils;
+package space.qbpo.utils.csv;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -11,10 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -25,33 +22,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-@Component
-public class HashCsvColumns implements QbpoUtil {
+import space.qbpo.utils.QbpoUtil;
+import space.qbpo.utils.QbpoValueMap;
 
-	private static final Logger log = LoggerFactory.getLogger(HashCsvColumns.class);
-	private static final String HASH_CSV_COLUMNS = "hash-csv-cols";
+@Component
+public class CsvLabelEncoder implements QbpoUtil {
+
+	private static final Logger log = LoggerFactory.getLogger(CsvLabelEncoder.class);
+	private static final String HASH_CSV_COLUMNS = "csv-label-encoder";
 
 	@Override
 	public String getHelpMessage() {
 		return new StringBuilder(" --str-col=string-col-1 --str-col=string-col-2 ")
-				.append("--set-col=set-col-1 --set-col-sep=set-col-sep" )
+				.append("--bag-col=set-col-1 --bag-col-sep=set-col-sep" )
 				.append("--in=/path/to/input/file --out=/path/to/output/file")
 				.append(System.lineSeparator())
-				.append("This command hash (with simple integer sequence) the given columns retaining ")
+				.append("This command label-encode (with simple integer sequence) the given columns retaining ")
 				.append(System.lineSeparator())
 				.append("the relational integrity of the data. ")
 				.append(System.lineSeparator())
 				.append("This does not do the encryption hash.")
 				.append(System.lineSeparator())
-				.append("Set columns are actually list-columns in nature.")
+				.append("Bag columns are actually list-columns in nature.")
 				.append(System.lineSeparator())
 				.append("in other words, [A|A|B] and [A|B] are considered different.")
 				.toString();
 	}
 
-	private static final String SET_COL = "set-col";
+	private static final String SET_COL = "bag-col";
 	private static final String STR_COL = "str-col";
-	private static final String SET_COL_SEP = "set-col-sep";
+	private static final String SET_COL_SEP = "bag-col-sep";
 
 	private static final String IN = "in";
 	private static final String OUT = "out";
@@ -72,7 +72,7 @@ public class HashCsvColumns implements QbpoUtil {
 		String outPath = valueArgs.getFirstString(OUT);
 
 		log.info(new StringBuilder(System.lineSeparator())
-				.append("Starting the hash-csv-columns ... ")
+				.append("Starting the csv-label-encoder ... ")
 				.append(System.lineSeparator())
 				.append("in : ").append(inPath).append(System.lineSeparator())
 				.append("out : ").append(outPath).append(System.lineSeparator())
@@ -83,26 +83,6 @@ public class HashCsvColumns implements QbpoUtil {
 		process (inPath, outPath, stringCols2HashMap, setCols2HashMap, setColSeps);
 	}
 
-	private static class LogProgress {
-		int count = 0, mod = 1000, modHit = 0;
-		Logger log = null;
-		public LogProgress (Logger log) {
-			this.log = log;
-		}
-		
-		public void progress () {
-			count = count + 1;
-			if (count % mod == 0) {
-				log.info("Processed " + count + " records.");
-				modHit = modHit + 1;
-				if (modHit == 9) {
-					mod = mod * 10;
-					modHit = 0;
-				}
-			}
-		}
-	}
-	
 	private void process(String inPath, String outPath, Map<String, Map<String, Integer>> stringCols2HashMap,
 			Map<String, Map<String, Integer>> setCols2HashMap, List<String> setColSeps) {
 		try (

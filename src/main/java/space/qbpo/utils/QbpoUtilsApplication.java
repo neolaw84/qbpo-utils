@@ -2,6 +2,7 @@ package space.qbpo.utils;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 /**
  * The application to demonstrate running. 
  * 
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
+@EnableConfigurationProperties
 public class QbpoUtilsApplication {
 
 	public static void main(String[] args) {
